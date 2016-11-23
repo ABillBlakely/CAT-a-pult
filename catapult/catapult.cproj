@@ -118,8 +118,29 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="main.c">
+    <Compile Include="..\buttons.c">
       <SubType>compile</SubType>
+      <Link>buttons.c</Link>
+    </Compile>
+    <Compile Include="..\buttons.h">
+      <SubType>compile</SubType>
+      <Link>buttons.h</Link>
+    </Compile>
+    <Compile Include="..\catapult.c">
+      <SubType>compile</SubType>
+      <Link>catapult.c</Link>
+    </Compile>
+    <Compile Include="..\catapult.h">
+      <SubType>compile</SubType>
+      <Link>catapult.h</Link>
+    </Compile>
+    <Compile Include="..\LCD_Display.c">
+      <SubType>compile</SubType>
+      <Link>LCD_Display.c</Link>
+    </Compile>
+    <Compile Include="..\LCD_Display.h">
+      <SubType>compile</SubType>
+      <Link>LCD_Display.h</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
