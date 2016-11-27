@@ -10,9 +10,11 @@
 #define LCD_Enable PB2
 
 #include <avr/io.h>
+#include <stdio.h>
 #include <util/delay.h>
+#include "USART.h"
 
-void LCD_Init(void);
+void initLCD(void);
 void LCD_write_letter(char letter);
 void LCD_clear_and_home(void);
 
