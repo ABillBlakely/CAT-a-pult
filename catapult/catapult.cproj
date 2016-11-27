@@ -142,6 +142,14 @@
       <SubType>compile</SubType>
       <Link>LCD_Display.h</Link>
     </Compile>
+    <Compile Include="..\USART.c">
+      <SubType>compile</SubType>
+      <Link>USART.c</Link>
+    </Compile>
+    <Compile Include="..\USART.h">
+      <SubType>compile</SubType>
+      <Link>USART.h</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

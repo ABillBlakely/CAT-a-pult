@@ -8,3 +8,5 @@
 
 ..\LCD_Display.c
 
+..\USART.c
+
