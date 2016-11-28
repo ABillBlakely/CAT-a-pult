@@ -77,6 +77,7 @@ static void initDebounceTimer(void)
 
 ISR(TIMER0_OVF_vect)
 {
+    // Timer is enabled by PCI interrupt vector.
     myINTCounter++;
     if (myINTCounter == 5)
     {
@@ -93,7 +94,10 @@ ISR(BTNIVect)
     // Check that any pin had falling edge.
     if (BTNPIN ^ BTNMASK)
     {
+        // If falling edge store value of all button pins
         old_pin_value = BTNPIN;
+
+        // Set counter to zero and start counter.
         myINTCounter = 0;
         TIMSK0 = 1 << TOIE0;
     }
