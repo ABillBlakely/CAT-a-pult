@@ -16,6 +16,9 @@
 
 void toggleLED(void);
 void initDebug(void);
+void rotate50(void);
+void rotateLess(void);
+void rotateMore(void);
 
 #endif
 
