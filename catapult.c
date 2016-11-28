@@ -3,9 +3,7 @@
 
 int main(void)
 {
-    char letter = 'a';
-    uint8_t jj = 0;
-
+    uint8_t pressed_button;
     initBtns();
     initDebug();
     initLCD();
@@ -16,24 +14,35 @@ int main(void)
 
     while(1)
     {
-        toggleLED();
-
-        if (letter <= 'f')
+        pressed_button = getBtnFlag();
+        switch(pressed_button)
         {
-            LCDWriteLetter(letter);
-            letter++;
+            case 1: rotateMotor(2);
+                    LCDClearAndHome();
+                    LCDWriteInt(2*10);
+                    LCDWriteLetter('%');
+                    toggleLED();
+                    break;
+            case 2: rotateMotor(4);
+                    LCDClearAndHome();
+                    LCDWriteInt(4*10);
+                    LCDWriteLetter('%');
+                    toggleLED();
+                    break;
+            case 3: rotateMotor(6);
+                    LCDClearAndHome();
+                    LCDWriteInt(6*10);
+                    LCDWriteLetter('%');
+                    toggleLED();
+                    break;
+            case 4: rotateMotor(8);
+                    LCDClearAndHome();
+                    LCDWriteInt(8*10);
+                    LCDWriteLetter('%');
+                    toggleLED();
+                    break;
+            default: break;
         }
-        else
-        {
-            LCDClearAndHome();
-            letter = 'a';
-        }
-        for (jj = 0; jj <= 10; jj++)
-            {
-                rotatePercent(jj);
-                LCDWriteLetter(0x30 | jj );
-                _delay_ms(2000);
-            }
 
     }
     return 0;
