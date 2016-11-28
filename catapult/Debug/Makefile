@@ -40,6 +40,7 @@ C_SRCS +=  \
 ../../buttons.c \
 ../../catapult.c \
 ../../LCD_Display.c \
+../../motors.c \
 ../../USART.c
 
 
@@ -53,24 +54,28 @@ OBJS +=  \
 buttons.o \
 catapult.o \
 LCD_Display.o \
+motors.o \
 USART.o
 
 OBJS_AS_ARGS +=  \
 buttons.o \
 catapult.o \
 LCD_Display.o \
+motors.o \
 USART.o
 
 C_DEPS +=  \
 buttons.d \
 catapult.d \
 LCD_Display.d \
+motors.d \
 USART.d
 
 C_DEPS_AS_ARGS +=  \
 buttons.d \
 catapult.d \
 LCD_Display.d \
+motors.d \
 USART.d
 
 OUTPUT_FILE_PATH +=catapult.elf
@@ -87,6 +92,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

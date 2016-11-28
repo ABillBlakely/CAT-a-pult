@@ -8,5 +8,7 @@
 
 ..\LCD_Display.c
 
+..\motors.c
+
 ..\USART.c
 
