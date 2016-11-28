@@ -11,14 +11,13 @@
 
 #include "LCD_display.h"
 #include "buttons.h"
+#include "motors.h"
 
 #define LED PB5
 
 void toggleLED(void);
 void initDebug(void);
-void rotate50(void);
-void rotateLess(void);
-void rotateMore(void);
+
 
 #endif
 
