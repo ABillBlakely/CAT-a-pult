@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 void initMotor(void);
-void rotatePercent(uint16_t rotation);
+void rotateMotor(uint8_t rotation);
 
 
 

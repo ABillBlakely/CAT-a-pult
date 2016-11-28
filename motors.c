@@ -3,11 +3,10 @@
 
 static void initTimer0(void);
 
-void rotatePercent(uint16_t rotation)
+void rotateMotor(uint8_t rotation)
 {
     // Accepts a value from 0 to 10 that adjusts the rotation.
 
-    // OCR0A = (rotation * 255 * 9) / 330;
     OCR0A = 20 + 5 * rotation;
 }
 
