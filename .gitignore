@@ -6,3 +6,5 @@
 *.map
 *.srec
 *.atsuo
+catapult/Debug/**
+catapult/.vs/**
