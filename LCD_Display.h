@@ -15,7 +15,7 @@
 #include "USART.h"
 
 void initLCD(void);
-void LCD_write_letter(char letter);
-void LCD_clear_and_home(void);
+void LCDWriteLetter(char letter);
+void LCDClearAndHome(void);
 
 #endif
