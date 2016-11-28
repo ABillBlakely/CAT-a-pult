@@ -12,6 +12,18 @@ void LCDWriteLetter(char letter)
     _delay_us(50);
 }
 
+void LCDWriteInt(uint16_t number)
+{
+    int jj = 0;
+    char line[16];
+    sprintf(line, "%d",number);
+    for(jj=0; line[jj] != '\0'; jj++)
+    {
+        LCDWriteLetter(line[jj]);
+    }
+}
+
+
 void LCDClearAndHome(void)
 {
     LCDWriteCMD(0x01);
@@ -22,11 +34,11 @@ void initLCD(void)
 {
     DDRD = 0x0F;
     DDRB = 0x7 | 1<<PB5;
-    
+
     PORTB &= ~(1<<LCD_Enable & 1<<LCD_ReadNotWrite & 1<<LCD_DataNotCommand);
-    
+
     // PORTD = (PORTD & 0xF0);
-    
+
     // Wait 20 ms or more after power, probs not needed.
     _delay_ms(50);
 
@@ -42,10 +54,10 @@ void initLCD(void)
 
 
 static void LCDWriteCMD(char command)
-{   
-    // Not publicly accesible, 
+{
+    // Not publicly accesible,
     // write a function to send commands if additional commands are needed.
-    
+
     // Send upper nibble:
     PORTB |= (1 << LCD_Enable);
     PORTD = (PORTD & 0xF0) | ((command >> 4) & 0x0F);
