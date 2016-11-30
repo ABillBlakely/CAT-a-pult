@@ -10,16 +10,15 @@ int main(void)
     initMotor();
     sei();
 
-    DDRD |= 1 << PD6;
 
     while(1)
     {
         pressed_button = getBtnFlag();
         switch(pressed_button)
         {
-            case 1: rotateMotor(2);
+            case 1: rotateMotor(0);
                     LCDClearAndHome();
-                    LCDWriteInt(2*10);
+                    LCDWriteInt(0);
                     LCDWriteLetter('%');
                     toggleLED();
                     break;
@@ -35,9 +34,9 @@ int main(void)
                     LCDWriteLetter('%');
                     toggleLED();
                     break;
-            case 4: rotateMotor(8);
+            case 4: rotateMotor(10);
                     LCDClearAndHome();
-                    LCDWriteInt(8*10);
+                    LCDWriteInt(100);
                     LCDWriteLetter('%');
                     toggleLED();
                     break;
