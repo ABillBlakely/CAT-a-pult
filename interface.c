@@ -1,5 +1,7 @@
 #include "interface.h"
 
+void testFunction(void);
+
 int main(void)
 {
     uint8_t restingstate = 1; //start in resting state
@@ -12,6 +14,8 @@ int main(void)
     initCatapult();
 
     sei();
+
+    testFunction();
 
     while(1)
     {
@@ -52,8 +56,19 @@ int main(void)
             }
             default: break;
         }
-
-
     }
     return 0;
+}
+
+void testFunction(void)
+{
+    while(1)
+    {
+        LCDWriteString("FWD");
+        setTension();
+        _delay_ms(1000);
+        LCDWriteString("REV");
+        releaseTension();
+        _delay_ms(1000);
+    }
 }
