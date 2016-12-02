@@ -1,7 +1,7 @@
 
 #include "catapult.h"
 
-#define FULLTURN 4096
+#define FULLTURN 2048
 
 void initCatapult(void)
 {
