@@ -134,6 +134,14 @@
       <SubType>compile</SubType>
       <Link>catapult.h</Link>
     </Compile>
+    <Compile Include="..\interface.c">
+      <SubType>compile</SubType>
+      <Link>interface.c</Link>
+    </Compile>
+    <Compile Include="..\interface.h">
+      <SubType>compile</SubType>
+      <Link>interface.h</Link>
+    </Compile>
     <Compile Include="..\LCD_Display.c">
       <SubType>compile</SubType>
       <Link>LCD_Display.c</Link>
