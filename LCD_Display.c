@@ -2,6 +2,17 @@
 
 static void LCDWriteCMD(char command);
 
+void LCDWriteString(char str[])
+{
+     int i=0;
+
+     LCDClearAndHome();
+     while(str[i] != '\0')
+     {
+         LCDWriteLetter(str[i]);
+         i++;
+     }
+}
 
 void LCDWriteLetter(char letter)
 {

@@ -18,6 +18,7 @@
 #include "USART.h"
 
 void initLCD(void);
+void LCDWriteString(char str[]);
 void LCDWriteLetter(char letter);
 void LCDClearAndHome(void);
 void LCDWriteInt(uint16_t number);
