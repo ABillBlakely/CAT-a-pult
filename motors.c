@@ -1,22 +1,140 @@
 #include "motors.h"
+// 4096 steps per rotation
+
+uint8_t static timer_flag = 0;
+static void initServoTimer(void);
+static void initStepperTimer(void);
+void initStepper1(void)
+{
+    DDRD |= 0xF0;
+    initStepperTimer();
+
+    // set to know starting value
+    PORTD = 0x80 | (PORTD & 0x0F);
+}
 
 
-static void initTimer0(void);
+void step1fwd(int16_t numSteps)
+{
+    uint16_t jj;
+    for(jj = 0; jj < numSteps; jj++)
+    {
+        if (PORTD & 0x10)
+        {
+            PORTD = (PORTD & 0x0F) | 0x8F;
+        }
+        else
+        {
+            PORTD = ((PORTD & 0xE0) >> 1) | (PORTD & 0x0F);
+        }
+    //     while (!timer_flag);
+    //     timer_flag = 0;
+        _delay_ms(1);
+    }
+}
 
-void rotateMotor(uint8_t rotation)
+
+void step1rev(int16_t numSteps)
+{
+    uint16_t jj;
+    for(jj = 0; jj < numSteps; jj++)
+    {
+
+        if (PORTD & 0x80)
+        {
+            PORTD = (PORTD & 0x0F) | 0x1F;
+        }
+        else
+        {
+            PORTD = ((PORTD & 0x70) << 1) | (PORTD & 0x0F);
+        }
+        // while (!timer_flag);
+        // timer_flag = 0;
+        _delay_ms(1);
+    }
+}
+
+
+void initStepper2(void)
+{
+    DDRC |= 0x0F;
+    initStepperTimer();
+
+    // set to known starting value
+    PORTC = 0x08 | (PORTC & 0xF0);
+}
+
+
+void step2fwd(int16_t numSteps)
+{
+    uint16_t jj;
+    for(jj = 0; jj < numSteps; jj++)
+    {
+        if (PORTC & 0x01)
+        {
+            PORTC = (PORTC & 0xF0) | 0xF8;
+        }
+        else
+        {
+            PORTC = ((PORTC & 0x0E) >> 1) | (PORTC & 0xF0);
+        }
+        // while (!timer_flag);
+        // timer_flag = 0;
+        _delay_ms(1);
+    }
+}
+
+
+void step2rev(int16_t numSteps)
+{
+    uint16_t jj;
+    for(jj = 0; jj < numSteps; jj++)
+    {
+
+        if (PORTC & 0x08)
+        {
+            PORTC = (PORTC & 0xF0) | 0xF1;
+        }
+        else
+        {
+            PORTC = ((PORTC & 0x07) << 1) | (PORTD & 0xF0);
+        }
+        // while (!timer_flag);
+        // timer_flag = 0;
+        _delay_ms(1);
+    }
+}
+
+
+void rotateServo(uint8_t rotation)
 {
     // Accepts a value from 0 to 10 that adjusts the rotation.
-
     OCR0A = 20 + 5 * rotation;
 }
 
-void initMotor(void)
+
+void initServo(void)
 {
-    initTimer0();
+    initServoTimer();
 }
 
 
-static void initTimer0(void)
+static void initStepperTimer(void)
+{
+     // Set timer mode to CTC.
+    TCCR0A = (1 << WGM01);
+
+    // Set prescaler to 1024 for a minimum frequency of 32.8 Hz.
+    TCCR0B = (1 << CS02);
+
+    // Set compare match to control motor speed.
+    OCR0A = 2;
+
+    TIMSK0 = 1 << OCIE0A;
+}
+
+
+static void initServoTimer(void)
 {
     /* Initialize Phase correct PWM mode.
     *
@@ -52,5 +170,6 @@ static void initTimer0(void)
 
 ISR(TIMER0_COMPA_vect)
 {
-
+    PORTB ^= 1 << PB5;
+    timer_flag = 1;
 }
