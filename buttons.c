@@ -38,12 +38,6 @@ static void btnPress(void)
     else if (!(BTNPIN & (1 << BTN2)))
         btn_flag = 2;
 
-    else if (!(BTNPIN & (1 << BTN3)))
-        btn_flag = 3;
-
-    else if (!(BTNPIN & (1 << BTN4)))
-        btn_flag = 4;
-
     else
         btn_flag = 0;
 }

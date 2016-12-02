@@ -5,11 +5,9 @@
 #include <avr/io.h>
 
 // All button properties should be changed here.
-#define BTN1 PC0
-#define BTN2 PC1
-#define BTN3 PC2
-#define BTN4 PC3
-#define BTNMASK (1 << BTN1 | 1 << BTN2 | 1 << BTN3 | 1 << BTN4)
+#define BTN1 PC5
+#define BTN2 PC6
+#define BTNMASK (1 << BTN1 | 1 << BTN2 )
 #define BTNPIN PINC
 #define BTNPORT PORTC
 #define BTNIPort PCIE1
