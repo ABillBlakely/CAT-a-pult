@@ -14,10 +14,10 @@ void initServo(void);
 void rotateServo(uint8_t rotation);
 void initStepper1(void);
 void initStepper2(void);
-void step1fwd(int16_t numSteps);
-void step1rev(int16_t numSteps);
-void step2fwd(int16_t numSteps);
-void step2rev(int16_t numSteps);
+void step1fwd(uint16_t numSteps);
+void step1rev(uint16_t numSteps);
+void step2fwd(uint16_t numSteps);
+void step2rev(uint16_t numSteps);
 
 
 #endif

@@ -1,57 +1,75 @@
 #include "motors.h"
-// 4096 steps per rotation
+#define MDELAY 3
+
+// 2048 steps per rotation
 
 uint8_t static timer_flag = 0;
+uint8_t static SavedPosition1 = 0x80;
+uint8_t static SavedPosition2 = 0x08;
+
 static void initServoTimer(void);
 static void initStepperTimer(void);
+
+
 void initStepper1(void)
 {
     DDRD |= 0xF0;
     initStepperTimer();
-
-    // set to know starting value
-    PORTD = 0x80 | (PORTD & 0x0F);
 }
 
 
-void step1fwd(int16_t numSteps)
+void step1fwd(uint16_t numSteps)
 {
     uint16_t jj;
+
+    // Restore state
+    PORTD = (SavedPosition1 & 0xF0) | (PIND & 0x0F);
+
     for(jj = 0; jj < numSteps; jj++)
     {
-        if (PORTD & 0x10)
+        if (PIND & 0x10)
         {
-            PORTD = (PORTD & 0x0F) | 0x8F;
+            PORTD = (PIND & 0x0F) | 0x8F;
         }
         else
         {
-            PORTD = ((PORTD & 0xE0) >> 1) | (PORTD & 0x0F);
+            PORTD = ((PIND & 0xE0) >> 1) | (PIND & 0x0F);
         }
     //     while (!timer_flag);
     //     timer_flag = 0;
-        _delay_ms(1);
+        _delay_ms(MDELAY);
     }
+
+    // Save state and turn off pin while motor is not running.
+    SavedPosition1 = PIND;
+    PORTD = PIND & 0x0F;
 }
 
 
-void step1rev(int16_t numSteps)
+void step1rev(uint16_t numSteps)
 {
     uint16_t jj;
+
+    // Restore state
+    PORTD = (SavedPosition1 & 0xF0) | (PIND & 0x0F);
+
     for(jj = 0; jj < numSteps; jj++)
     {
 
-        if (PORTD & 0x80)
+        if (PIND & 0x80)
         {
-            PORTD = (PORTD & 0x0F) | 0x1F;
+            PORTD = (PIND & 0x0F) | 0x1F;
         }
         else
         {
-            PORTD = ((PORTD & 0x70) << 1) | (PORTD & 0x0F);
+            PORTD = ((PIND & 0x70) << 1) | (PIND & 0x0F);
         }
         // while (!timer_flag);
         // timer_flag = 0;
-        _delay_ms(1);
+        _delay_ms(MDELAY);
     }
+    SavedPosition1 = PIND;
+    PORTD = PIND & 0x0F;
 }
 
 
@@ -59,50 +77,59 @@ void initStepper2(void)
 {
     DDRC |= 0x0F;
     initStepperTimer();
-
-    // set to known starting value
-    PORTC = 0x08 | (PORTC & 0xF0);
 }
 
 
-void step2fwd(int16_t numSteps)
+void step2fwd(uint16_t numSteps)
 {
     uint16_t jj;
+
+    // Store state
+    PORTC = (SavedPosition2 & 0x0F) | (PINC & 0xF0);
+
     for(jj = 0; jj < numSteps; jj++)
     {
-        if (PORTC & 0x01)
+        if (PINC & 0x01)
         {
-            PORTC = (PORTC & 0xF0) | 0xF8;
+            PORTC = (PINC & 0xF0) | 0xF8;
         }
         else
         {
-            PORTC = ((PORTC & 0x0E) >> 1) | (PORTC & 0xF0);
+            PORTC = ((PINC & 0x0E) >> 1) | (PINC & 0xF0);
         }
         // while (!timer_flag);
         // timer_flag = 0;
-        _delay_ms(1);
+        _delay_ms(MDELAY);
     }
+    SavedPosition2 = PINC;
+    PORTC = PINC & 0xF0;
 }
 
 
-void step2rev(int16_t numSteps)
+void step2rev(uint16_t numSteps)
 {
     uint16_t jj;
+
+    // Store state
+    PORTC = (SavedPosition2 & 0x0F) | (PINC & 0xF0);
+
     for(jj = 0; jj < numSteps; jj++)
     {
 
-        if (PORTC & 0x08)
+        if (PINC & 0x08)
         {
-            PORTC = (PORTC & 0xF0) | 0xF1;
+            PORTC = (PINC & 0xF0) | 0xF1;
         }
         else
         {
-            PORTC = ((PORTC & 0x07) << 1) | (PORTD & 0xF0);
+            PORTC = ((PINC & 0x07) << 1) | (PINC & 0xF0);
         }
         // while (!timer_flag);
         // timer_flag = 0;
-        _delay_ms(1);
+        _delay_ms(MDELAY);
     }
+    SavedPosition2 = PINC;
+    PORTC = PINC & 0xF0;
 }
 
 
@@ -170,6 +197,5 @@ static void initServoTimer(void)
 
 ISR(TIMER0_COMPA_vect)
 {
-    PORTB ^= 1 << PB5;
     timer_flag = 1;
 }
