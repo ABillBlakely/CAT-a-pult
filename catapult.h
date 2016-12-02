@@ -9,14 +9,13 @@
 #include <util/delay.h>
 #include <stdlib.h>
 
-#include "LCD_display.h"
-#include "buttons.h"
 #include "motors.h"
 
-#define LED PB5
-
-void toggleLED(void);
-void initDebug(void);
+void initCatapult(void);
+void setLatch(void);
+void releaseLatch(void);
+void setTension(void);
+void releaseTension(void);
 
 
 #endif
