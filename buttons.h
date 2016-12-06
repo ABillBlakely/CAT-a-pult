@@ -5,14 +5,15 @@
 #include <avr/io.h>
 
 // All button properties should be changed here.
-#define BTN1 PC5
-#define BTN2 PC6
-#define BTNMASK (1 << BTN1 | 1 << BTN2 )
+#define BTN1 PC4
+#define BTN2 PC5
 #define BTNPIN PINC
 #define BTNPORT PORTC
 #define BTNIPort PCIE1
 #define BTNIMaskReg PCMSK1
 #define BTNIVect PCINT1_vect
+
+#define BTNMASK (1 << BTN1 | 1 << BTN2 )
 
 // Public Functions
 void initBtns(void);

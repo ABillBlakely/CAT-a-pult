@@ -59,26 +59,29 @@ static void initPCINT(void)
 static void initDebounceTimer(void)
 {
     // Timer overflow mode Normal Mode
-    TCCR0A = 0x00;
+    TCCR2A = 0x00;
 
     // Timer clk = system clk / 1024
-    TCCR0B = (1<<CS02) | (1<<CS00);
+    TCCR2B = (1<<CS22) | (1<<CS21) | (1<<CS20);
 
     // Clear previous timer overflow
-    TIFR0 = 0x07;
+    TIFR2 = 0x07;
+
+    // Initialize counter variable.
+    myINTCounter = 0;
 }
 
 
-ISR(TIMER0_OVF_vect)
+ISR(TIMER2_OVF_vect)
 {
     // Timer is enabled by PCI interrupt vector.
     myINTCounter++;
-    if (myINTCounter == 5)
+    if (myINTCounter == 8)
     {
-        if(old_pin_value == BTNPIN)
+        if(old_pin_value == (BTNPIN & BTNMASK))
             btnPress();
         myINTCounter = 0;
-        TIMSK0 = 0x00;
+        TIMSK2 = 0x00;
     }
 }
 
@@ -86,13 +89,13 @@ ISR(TIMER0_OVF_vect)
 ISR(BTNIVect)
 {
     // Check that any pin had falling edge.
-    if (BTNPIN ^ BTNMASK)
+    if ((BTNPIN & BTNMASK) ^ BTNMASK)
     {
         // If falling edge store value of all button pins
-        old_pin_value = BTNPIN;
+        old_pin_value = (BTNPIN & BTNMASK);
 
-        // Set counter to zero and start counter.
+        // Clear count and start counter.
         myINTCounter = 0;
-        TIMSK0 = 1 << TOIE0;
+        TIMSK2 = 1 << TOIE2;
     }
 }
