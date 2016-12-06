@@ -15,7 +15,9 @@ int main(void)
 
     sei();
 
-    testFunction();
+    // testFunction();
+
+    LCDWriteString("Press to tension");
 
     while(1)
     {
@@ -26,19 +28,21 @@ int main(void)
             { //button 1 tensions the band and releases pin
                 if(restingstate && !tensionedstate && !releasedstate)
                 {
+                    LCDWriteString("Tensioning...");
                     setTension(); // tension band
-                    LCDWriteString("AIM");
                     restingstate = 0; //change states
                     tensionedstate = 1;
+                    LCDWriteString("Press to fire");
                     break;
                 }
                 else if(!restingstate && tensionedstate && !releasedstate)
                 {
+                    LCDWriteString("FIRING");
                     releaseLatch(); //release pin upon second press
-                    LCDWriteString("FIRE");
                     tensionedstate = 0; //change states
                     releasedstate = 1;
                     //delay_ms(5000); //wait 5s? relax band, maybe start timer instead?
+                    LCDWriteString("Resetting...");
                     releaseTension();  //relax band
                 }
                 break;
@@ -48,9 +52,9 @@ int main(void)
                 if(!restingstate && !tensionedstate && releasedstate)
                 {
                     setLatch();
-                    LCDWriteString("READY");
                     releasedstate = 0;
                     restingstate = 1;
+                    LCDWriteString("Press to tension");
                 }
                 break;
             }
@@ -62,13 +66,12 @@ int main(void)
 
 void testFunction(void)
 {
+    uint8_t pressed_button;
+    
     while(1)
-    {
-        LCDWriteString("FWD");
-        setTension();
-        _delay_ms(1000);
-        LCDWriteString("REV");
-        releaseTension();
+    {        
+        pressed_button = getBtnFlag();
+        LCDWriteInt(pressed_button);
         _delay_ms(1000);
     }
 }
