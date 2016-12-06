@@ -3,9 +3,9 @@
 
 // 2048 steps per rotation
 
-uint8_t static timer_flag = 0;
-uint8_t static SavedPosition1 = 0x80;
-uint8_t static SavedPosition2 = 0x08;
+uint8_t static volatile timer_flag = 0;
+uint8_t static volatile SavedPosition1 = 0x80;
+uint8_t static volatile SavedPosition2 = 0x08;
 
 static void initServoTimer(void);
 static void initStepperTimer(void);
@@ -14,7 +14,7 @@ static void initStepperTimer(void);
 void initStepper1(void)
 {
     DDRD |= 0xF0;
-    initStepperTimer();
+    // initStepperTimer();
 }
 
 
@@ -35,9 +35,8 @@ void step1fwd(uint16_t numSteps)
         {
             PORTD = ((PIND & 0xE0) >> 1) | (PIND & 0x0F);
         }
-    //     while (!timer_flag);
-    //     timer_flag = 0;
-        _delay_ms(MDELAY);
+        while (!timer_flag);
+        timer_flag = 0;
     }
 
     // Save state and turn off pin while motor is not running.
@@ -64,9 +63,8 @@ void step1rev(uint16_t numSteps)
         {
             PORTD = ((PIND & 0x70) << 1) | (PIND & 0x0F);
         }
-        // while (!timer_flag);
-        // timer_flag = 0;
-        _delay_ms(MDELAY);
+        while (!timer_flag);
+        timer_flag = 0;
     }
     SavedPosition1 = PIND;
     PORTD = PIND & 0x0F;
@@ -97,9 +95,8 @@ void step2fwd(uint16_t numSteps)
         {
             PORTC = ((PINC & 0x0E) >> 1) | (PINC & 0xF0);
         }
-        // while (!timer_flag);
-        // timer_flag = 0;
-        _delay_ms(MDELAY);
+        while (!timer_flag);
+        timer_flag = 0;
     }
     SavedPosition2 = PINC;
     PORTC = PINC & 0xF0;
@@ -124,9 +121,8 @@ void step2rev(uint16_t numSteps)
         {
             PORTC = ((PINC & 0x07) << 1) | (PINC & 0xF0);
         }
-        // while (!timer_flag);
-        // timer_flag = 0;
-        _delay_ms(MDELAY);
+        while (!timer_flag);
+        timer_flag = 0;
     }
     SavedPosition2 = PINC;
     PORTC = PINC & 0xF0;
@@ -152,10 +148,11 @@ static void initStepperTimer(void)
     TCCR0A = (1 << WGM01);
 
     // Set prescaler to 1024 for a minimum frequency of 32.8 Hz.
-    TCCR0B = (1 << CS02);
+    TCCR0B = (1 << CS02) | (1 << CS00);
 
     // Set compare match to control motor speed.
-    OCR0A = 2;
+    // Torque lost  below 45, stop spinning below 30
+    OCR0A = 45;
 
     TIMSK0 = 1 << OCIE0A;
 }
