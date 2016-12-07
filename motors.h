@@ -5,9 +5,15 @@
 #define F_CPU 16000000
 #endif
 
+// Set STEP_INTERVAL to control motor speed.
+// Larger is slower, max is 255.
+// Significant torque is lost  below about 50,
+// Unloaded movement stops below 30.
+
+#define STEP_INTERVAL 60
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <util/delay.h>
 #include <stdlib.h>
 
 void initServo(void);

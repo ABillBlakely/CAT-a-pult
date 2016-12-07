@@ -154,7 +154,7 @@ static void initStepperTimer(void)
 
     // Set compare match to control motor speed.
     // Torque lost  below 45, stop spinning below 30
-    OCR0A = 50;
+    OCR0A = STEP_INTERVAL;
 
     TIMSK0 = 1 << OCIE0A;
 }
