@@ -82,7 +82,7 @@ void step2fwd(uint16_t numSteps)
 {
     uint16_t jj;
 
-    // Store state
+    // Restore state
     PORTC = (SavedPosition2 & 0x0F) | (PINC & 0xF0);
 
     for(jj = 0; jj < numSteps; jj++)
@@ -98,8 +98,9 @@ void step2fwd(uint16_t numSteps)
         while (!timer_flag);
         timer_flag = 0;
     }
+    // Store State
     SavedPosition2 = PINC;
-    PORTC = PINC & 0xF0;
+    // PORTC = PINC & 0xF0;
 }
 
 
@@ -107,7 +108,7 @@ void step2rev(uint16_t numSteps)
 {
     uint16_t jj;
 
-    // Store state
+    // Restore state
     PORTC = (SavedPosition2 & 0x0F) | (PINC & 0xF0);
 
     for(jj = 0; jj < numSteps; jj++)
@@ -124,6 +125,7 @@ void step2rev(uint16_t numSteps)
         while (!timer_flag);
         timer_flag = 0;
     }
+    // Store State
     SavedPosition2 = PINC;
     PORTC = PINC & 0xF0;
 }
@@ -152,7 +154,7 @@ static void initStepperTimer(void)
 
     // Set compare match to control motor speed.
     // Torque lost  below 45, stop spinning below 30
-    OCR0A = 45;
+    OCR0A = 50;
 
     TIMSK0 = 1 << OCIE0A;
 }
