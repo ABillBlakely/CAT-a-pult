@@ -10,7 +10,7 @@
 // Significant torque is lost  below about 50,
 // Unloaded movement stops below 30.
 
-#define STEP_INTERVAL 60
+#define STEP_INTERVAL 70
 
 #include <avr/io.h>
 #include <avr/interrupt.h>

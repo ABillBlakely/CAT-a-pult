@@ -4,8 +4,8 @@
 // 2048 steps per rotation
 
 uint8_t static volatile timer_flag = 0;
-uint8_t static volatile SavedPosition1 = 0x80;
-uint8_t static volatile SavedPosition2 = 0x08;
+uint8_t static volatile SavedPosition1 = 0x60;
+uint8_t static volatile SavedPosition2 = 0x06;
 
 static void initServoTimer(void);
 static void initStepperTimer(void);
@@ -27,13 +27,13 @@ void step1fwd(uint16_t numSteps)
 
     for(jj = 0; jj < numSteps; jj++)
     {
-        if (PIND & 0x10)
+        switch(PIND & 0xF0)
         {
-            PORTD = (PIND & 0x0F) | 0x8F;
-        }
-        else
-        {
-            PORTD = ((PIND & 0xE0) >> 1) | (PIND & 0x0F);
+            case 0xC0: PORTD = 0x60 | (PIND & 0x0F); break;
+            case 0x60: PORTD = 0x30 | (PIND & 0x0F); break;
+            case 0x30: PORTD = 0x90 | (PIND & 0x0F); break;
+            case 0x90: PORTD = 0xC0 | (PIND & 0x0F); break;
+            default: PORTD = 0x60 | (PIND & 0x0F); break;
         }
         while (!timer_flag);
         timer_flag = 0;
@@ -54,18 +54,18 @@ void step1rev(uint16_t numSteps)
 
     for(jj = 0; jj < numSteps; jj++)
     {
-
-        if (PIND & 0x80)
+        switch(PIND & 0xF0)
         {
-            PORTD = (PIND & 0x0F) | 0x1F;
-        }
-        else
-        {
-            PORTD = ((PIND & 0x70) << 1) | (PIND & 0x0F);
+            case 0xC0: PORTD = 0x90 | (PIND & 0x0F); break;
+            case 0x60: PORTD = 0xC0 | (PIND & 0x0F); break;
+            case 0x30: PORTD = 0x60 | (PIND & 0x0F); break;
+            case 0x90: PORTD = 0x30 | (PIND & 0x0F); break;
+            default: PORTD = 0x60 | (PIND & 0x0F); break;
         }
         while (!timer_flag);
         timer_flag = 0;
     }
+    // Save state and zero ports
     SavedPosition1 = PIND;
     PORTD = PIND & 0x0F;
 }
@@ -85,22 +85,22 @@ void step2fwd(uint16_t numSteps)
     // Restore state
     PORTC = (SavedPosition2 & 0x0F) | (PINC & 0xF0);
 
-    for(jj = 0; jj < numSteps; jj++)
+    for(jj = 0; jj < (numSteps); jj++)
     {
-        if (PINC & 0x01)
+        switch(PINC & 0x0F)
         {
-            PORTC = (PINC & 0xF0) | 0xF8;
-        }
-        else
-        {
-            PORTC = ((PINC & 0x0E) >> 1) | (PINC & 0xF0);
+            case 0x0C: PORTC = 0x6 | (PINC & 0xF0); break;
+            case 0x06: PORTC = 0x3 | (PINC & 0xF0); break;
+            case 0x03: PORTC = 0x9 | (PINC & 0xF0); break;
+            case 0x09: PORTC = 0xC | (PINC & 0xF0); break;
+            default: PORTC = 0x6 | (PINC & 0xF0); break;
         }
         while (!timer_flag);
         timer_flag = 0;
     }
     // Store State
     SavedPosition2 = PINC;
-    // PORTC = PINC & 0xF0;
+    // Do not zero the motor for better holding torque under tension.
 }
 
 
@@ -113,19 +113,18 @@ void step2rev(uint16_t numSteps)
 
     for(jj = 0; jj < numSteps; jj++)
     {
-
-        if (PINC & 0x08)
+        switch(PINC & 0x0F)
         {
-            PORTC = (PINC & 0xF0) | 0xF1;
-        }
-        else
-        {
-            PORTC = ((PINC & 0x07) << 1) | (PINC & 0xF0);
+            case 0x0C: PORTC = 0x9 | (PINC & 0xF0); break;
+            case 0x06: PORTC = 0xC | (PINC & 0xF0); break;
+            case 0x03: PORTC = 0x6 | (PINC & 0xF0); break;
+            case 0x09: PORTC = 0x3 | (PINC & 0xF0); break;
+            default: PORTC = 0x6 | (PINC & 0xF0); break;
         }
         while (!timer_flag);
         timer_flag = 0;
     }
-    // Store State
+    // Store State and zero ports.
     SavedPosition2 = PINC;
     PORTC = PINC & 0xF0;
 }
