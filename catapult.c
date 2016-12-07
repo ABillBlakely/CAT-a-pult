@@ -1,8 +1,6 @@
 
 #include "catapult.h"
 
-#define FULLTURN 2048
-
 void initCatapult(void)
 {
     initStepper1();
@@ -10,23 +8,23 @@ void initCatapult(void)
 }
 void setLatch(void)
 {
-    step1fwd(FULLTURN);
+    step1rev(LATCHTURN);
 }
 
 
 void releaseLatch(void)
 {
-    step1rev(FULLTURN);
+    step1fwd(LATCHTURN);
 }
 
 
 void setTension(void)
 {
-    step2fwd(FULLTURN);
+    step2fwd(TENSIONTURN);
 }
 
 
 void releaseTension(void)
 {
-    step2rev(FULLTURN);
+    step2rev(TENSIONTURN);
 }
