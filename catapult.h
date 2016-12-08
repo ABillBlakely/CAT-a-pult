@@ -2,8 +2,9 @@
 #define catapult_H_
 
 #define FULLTURN 2048
-#define LATCHTURN 600
-#define TENSIONTURN 2500
+#define LATCHTURN 900
+#define TENSIONTURN 2650
+// #define TENSIONTURN 1
 
 #ifndef F_CPU
 #define F_CPU 16000000UL
