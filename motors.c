@@ -1,5 +1,4 @@
 #include "motors.h"
-#define MDELAY 3
 
 // 2048 steps per rotation
 
